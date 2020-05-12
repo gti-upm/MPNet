@@ -14,7 +14,7 @@ size=5.0
 
 # Load trained model for path generation
 mlp = MLP(32, 2) # simple @D
-mlp.load_state_dict(torch.load('models/mlp_100_4000_PReLU_ae_dd150.pkl'))
+mlp.load_state_dict(torch.load('models/mlp_100_4000_PReLU_ae_dd_final.pkl'))
 
 if torch.cuda.is_available():
 	mlp.cuda()
@@ -241,13 +241,13 @@ def main(args):
 	
 
 	
-	tp=0
-	fp=0
+	tp=0  # Total paths
+	fp=0  # Feasible paths
 	tot=[]
 	for i in range(0,1):
 		et=[]
 		for j in range(0,2):
-			print ("step: i="+str(i)+" j="+str(j))
+			print("step: i="+str(i)+" j="+str(j))
 			p1_ind=0
 			p2_ind=0
 			p_ind=0	
@@ -313,24 +313,24 @@ def main(args):
 						t=toc-tic
 						et.append(t)
 						fp=fp+1
-						print ("path[0]:")
+						print("path[0]:")
 						for p in range(0,len(path)):
-							print (path[p][0])
-						print ("path[1]:")
+							print(path[p][0])
+						print("path[1]:")
 						for p in range(0,len(path)):
-							print (path[p][1])
-						print ("Actual path[0]:")
+							print(path[p][1])
+						print("Actual path[0]:")
 						for p in range(0,path_lengths[i][j]):
-							print (paths[i][j][p][0])
-						print ("Actual path[1]:")
+							print(paths[i][j][p][0])
+						print("Actual path[1]:")
 						for p in range(0,path_lengths[i][j]):
-							print (paths[i][j][p][1])
+							print(paths[i][j][p][1])
 					else:
 						sp=0
 						indicator=0
 						while indicator==0 and sp<10 and path !=0:
 							sp=sp+1
-							g=np.zeros(2,dtype=np.float32)
+							#g=np.zeros(2,dtype=np.float32)
 							g=torch.from_numpy(paths[i][j][path_lengths[i][j]-1])
 							path=replan_path(path,g,i,obs) #replanning at coarse level
 							if path !=0:
@@ -343,30 +343,30 @@ def main(args):
 								et.append(t)
 								fp=fp+1
 								if len(path)<20:
-									print ("new_path[0]:")
+									print("new_path[0]:")
 									for p in range(0,len(path)):
-										print (path[p][0])
-									print ("new_path[1]:")
+										print(path[p][0])
+									print("new_path[1]:")
 									for p in range(0,len(path)):
-										print (path[p][1])
-									print ("Actual path[0]:")
+										print(path[p][1])
+									print("Actual path[0]:")
 									for p in range(0,path_lengths[i][j]):
-										print (paths[i][j][p][0])
-									print ("Actual path[1]:")
+										print(paths[i][j][p][0])
+									print("Actual path[1]:")
 									for p in range(0,path_lengths[i][j]):
-										print (paths[i][j][p][1])
+										print(paths[i][j][p][1])
 								else:
-									print "path found, dont worry"	
+									print("path found, dont worry")
 
 				
 		tot.append(et)					
 	pickle.dump(tot, open("time_s2D_unseen_mlp.p", "wb" ))	
 
 
-	print ("total paths")
-	print (tp)
-	print ("feasible paths")
-	print (fp)
+	print("total paths")
+	print(tp)
+	print("feasible paths")
+	print(fp)
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()

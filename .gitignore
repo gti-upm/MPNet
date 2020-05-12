@@ -1,4 +1,7 @@
 /data_generation/
 /MPNet/output/
 /MPNet/models/
+/MPNet/AE/output/
+/MPNet/AE/models/
 /venv/
+
